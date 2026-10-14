@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "FootZone",
+    "slug": "footzone",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#080B0A"
+    },
+    "android": {
+      "package": "com.footzone.app"
+    },
+    "ios": {
+      "bundleIdentifier": "com.footzone.app"
+    }
+  }
+}
