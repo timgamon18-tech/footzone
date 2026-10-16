@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#030b12">
+<title>FootZone — Le football partout</title>
+
+<style>
+:root {
+  --bg: #030b12;
+  --card: #091925;
+  --border: #183447;
+  --green: #00ff91;
+  --text: #f2f8fc;
+  --muted: #91a8ba;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: #030b12;
+  z-index: 10;
+}
+.logo {
+  background: var(--green);
+  color: #00170c;
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: 900;
+}
+h1 { font-size: 23px; margin: 0; }
+h1 span { color: var(--green); }
+header small { color: var(--muted); }
+main { max-width: 1050px; margin: auto; padding: 18px; }
+.hero {
+  padding: 30px 22px;
+  border-radius: 18px;
+  border: 1px solid #176447;
+  background: linear-gradient(120deg,#071b2b,#06452e);
+  margin-bottom: 20px;
+}
+.hero h2 { font-size: 38px; margin: 8px 0; }
+.hero h2 span { color: var(--green); }
+.hero p { color: #c1d6e1; }
+.tag {
+  color: var(--green);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 18px 0;
+}
+nav button, .filter {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 11px 15px;
+  border-radius: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+nav button.active, .filter.active {
+  background: var(--green);
+  color: #00170c;
+  font-weight: bold;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.card h3 {
+  margin: 0;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.card h3 span { color: var(--green); }
+.match {
+  padding: 15px;
+  border-bottom: 1px solid var(--border);
+}
+.competition {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.teams div:last-child { text-align: right; }
+.score {
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--green);
+}
+.star {
+  background: none;
+  border: 0;
+  color: #ffd45e;
+  font-size: 22px;
+  cursor: pointer;
+  float: right;
+}
+table { width: 100%; border-collapse: collapse; }
+td, th {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+th { color: var(--muted); font-size: 12px; }
+td:last-child, th:last-child { text-align: right; }
+.news {
+  padding: 15px;
+  border-bottom: 1px solid var(--border);
+}
+.news strong { display: block; margin-bottom: 6px; }
+.news p { color: var(--muted); font-size: 13px; margin: 0; }
+.page { display: none; }
+.page.active { display: block; }
+.notice { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.empty { padding: 20px; color: var(--muted); }
+@media(max-width:700px) {
+  .grid { grid-template-columns: 1fr; }
+  main { padding: 12px; }
+  .hero h2 { font-size: 32px; }
+  header { padding: 12px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">F</div>
+  <div>
+    <h1>Foot<span>Zone</span></h1>
+    <small>Le football partout</small>
+  </div>
+</header>
+
+<main>
+  <section class="page active" id="accueil">
+    <div class="hero">
+      <div class="tag">TOUTE LA PLANÈTE FOOTBALL</div>
+      <h2>Foot<span>Zone</span></h2>
+      <p>Chaque match. Chaque équipe. Toute la passion.</p>
+    </div>
+
+    <nav>
+      <button class="filter active" data-league="Tous">🌍 Tous</button>
+      <button class="filter" data-league="Ligue 1">🇫🇷 Ligue 1</button>
+      <button class="filter" data-league="Premier League">🏴 Premier League</button>
+      <button class="filter" data-league="Liga">🇪🇸 Liga</button>
+    </nav>
+
+    <div class="grid">
+      <div>
+        <section class="card">
+          <h3><span>●</span> Les matchs</h3>
+          <div id="matches"></div>
+        </section>
+
+        <section class="card">
+          <h3><span>▣</span> Actualités football</h3>
+          <div class="news">
+            <strong>🟢 L'actualité des Verts</strong>
+            <p>Retrouve ici les actualités de ton club préféré.</p>
+          </div>
+          <div class="news">
+            <strong>🏆 Les grands championnats</strong>
+            <p>Les résultats et les rencontres à suivre.</p>
+          </div>
+          <div class="news">
+            <strong>⚽ Le football européen</strong>
+            <p>Une rubrique dédiée aux grandes compétitions.</p>
+          </div>
+        </section>
+      </div>
+
+      <div>
+        <section class="card">
+          <h3><span>▤</span> Classement Ligue 1</h3>
+          <table>
+            <thead><tr><th>#</th><th>Équipe</th><th>Pts</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>🔵 PSG</td><td>21</td></tr>
+              <tr><td>2</td><td>🔴 Monaco</td><td>17</td></tr>
+              <tr><td>3</td><td>🔵 Marseille</td><td>16</td></tr>
+              <tr><td>4</td><td>🔴 Lille</td><td>15</td></tr>
+              <tr><td>5</td><td>🟢 ASSE</td><td>13</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card">
+          <h3><span>☆</span> Mes équipes favorites</h3>
+          <div id="favorites" class="empty">Ajoute tes équipes avec les étoiles ⭐</div>
+        </section>
+      </div>
+    </div>
+    <p class="notice">Attention : les scores et classements affichés sont fictifs. Ils ne correspondent pas aux résultats en direct.</p>
+  </section>
+
+  <section class="page" id="direct">
+    <h2>⚽ Tous les matchs</h2>
+    <div class="card" id="allMatches"></div>
+  </section>
+
+  <section class="page" id="classements">
+    <h2>🏆 Classements</h2>
+    <div class="card">
+      <table>
+        <thead><tr><th>#</th><th>Équipe</th><th>Pts</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>🔵 PSG</td><td>21</td></tr>
+          <tr><td>2</td><td>🔴 Monaco</td><td>17</td></tr>
+          <tr><td>3</td><td>🔵 Marseille</td><td>16</td></tr>
+          <tr><td>4</td><td>🔴 Lille</td><td>15</td></tr>
+          <tr><td>5</td><td>🟢 ASSE</td><td>13</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="notice">Classement de démonstration.</p>
+  </section>
+
+  <section class="page" id="actus">
+    <h2>📰 Actualités</h2>
+    <div class="card">
+      <div class="news"><strong>🟢 ASSE</strong><p>Retrouve les actualités des Verts.</p></div>
+      <div class="news"><strong>🌍 Football européen</strong><p>Les grandes compétitions sur FootZone.</p></div>
+      <div class="news"><strong>⚽ Les rendez-vous du football</strong><p>Une rubrique pour suivre les rencontres.</p></div>
+    </div>
+  </section>
+
+  <section class="page" id="equipes">
+    <h2>⭐ Mes équipes</h2>
+    <div class="card" id="teamPicker"></div>
+  </section>
+</main>
+
+<nav style="padding:12px;justify-content:center;flex-wrap:wrap;border-top:1px solid #183447">
+  <button data-page="accueil" class="active">⌂ Accueil</button>
+  <button data-page="direct">⚽ Matchs</button>
+  <button data-page="classements">🏆 Classements</button>
+  <button data-page="actus">📰 Actualités</button>
+  <button data-page="equipes">⭐ Mes équipes</button>
+</nav>
+
+<script>
+const games = [
+ {league:"Ligue 1",home:"ASSE",away:"Lille",score:"1 - 0",time:"Démo"},
+ {league:"Premier League",home:"Man City",away:"Arsenal",score:"2 - 1",time:"Démo"},
+ {league:"Liga",home:"Real Madrid",away:"Barcelone",score:"—",time:"21:00"},
+ {league:"Ligue 1",home:"Marseille",away:"Monaco",score:"—",time:"21:00"}
+];
+
+let favorites = JSON.parse(localStorage.getItem("footzone-favorites") || '["ASSE"]');
+let currentLeague = "Tous";
+
+function matchCard(m) {
+  return `<div class="match">
+    <button class="star" data-fav="${m.home}">${favorites.includes(m.home)?"★":"☆"}</button>
+    <div class="competition">${m.league} · ${m.time}</div>
+    <div class="teams">
+      <div>⚽ ${m.home}</div>
+      <div class="score">${m.score}</div>
+      <div>${m.away} ⚽</div>
+    </div>
+  </div>`;
+}
+
+function renderMatches() {
+  const list = games.filter(g => currentLeague === "Tous" || g.league === currentLeague);
+  document.getElementById("matches").innerHTML = list.map(matchCard).join("");
+  document.getElementById("allMatches").innerHTML = games.map(matchCard).join("");
+  renderFavorites();
+}
+
+function renderFavorites() {
+  document.getElementById("favorites").innerHTML = favorites.length
+    ? favorites.map(t => `<p>⭐ ${t}</p>`).join("")
+    : "Aucune équipe favorite pour le moment.";
+  document.getElementById("teamPicker").innerHTML =
+    ["ASSE","Marseille","Lyon","PSG","Lille","Monaco","Real Madrid","Barcelone","Arsenal"]
+    .map(t => `<div class="match">${t}<button class="star" data-fav="${t}">${favorites.includes(t)?"★":"☆"}</button></div>`).join("");
+}
+
+document.addEventListener("click", e => {
+  const fav = e.target.closest("[data-fav]");
+  if (fav) {
+    const team = fav.dataset.fav;
+    favorites = favorites.includes(team)
+      ? favorites.filter(t => t !== team)
+      : [...favorites, team];
+    localStorage.setItem("footzone-favorites", JSON.stringify(favorites));
+    renderMatches();
+  }
+
+  const filter = e.target.closest("[data-league]");
+  if (filter) {
+    currentLeague = filter.dataset.league;
+    document.querySelectorAll("[data-league]").forEach(b =>
+      b.classList.toggle("active", b === filter));
+    renderMatches();
+  }
+
+  const page = e.target.closest("[data-page]");
+  if (page) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(page.dataset.page).classList.add("active");
+    document.querySelectorAll("[data-page]").forEach(b =>
+      b.classList.toggle("active", b === page));
+    window.scrollTo(0,0);
+  }
+});
+
+renderMatches();
+</script>
+</body>
+</html>
